@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { SiteContext } from '../App'; 
 
-type Props = {
-  count: number
-}
-
-const ClickCounter = (props: Props) => {
-  const [count, setCount] = useState(props.count);
+const ClickCounter = () => {
+  const { state, dispatch } = useContext(SiteContext);
+  const [count, setCount] = useState(state.INIT_COUNT);
 
   useEffect(() => {
     const title = document.title;
     document.title += ` ${count} click`;
+    dispatch({
+      type: 'UPDATE',
+      payload: count
+    });
     return () => {
       document.title = title;
     };
@@ -28,7 +30,7 @@ const ClickCounter = (props: Props) => {
       />
       <ClickButton
         text="Clear"
-        onClick={() => setCount(initCount(count, props.count))}
+        onClick={() => setCount(initCount(count, state.INIT_COUNT))}
       />
     </div>
   );
